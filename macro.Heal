@@ -2,7 +2,7 @@ Macro Name:
 ☣Heal☣
 
 Dependancies:
-Requires APIs PowerCards, AlterBars-NLD (customised AlterBars), TokenMod
+Requires APIs ChatSetAttr, PowerCards, AlterBars-NLD (customised AlterBars), TokenMod
 
 Macro Code:
 !power {{
