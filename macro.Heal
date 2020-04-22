@@ -1,0 +1,20 @@
+Macro Name:
+☣Heal☣
+
+Dependancies:
+Requires APIs PowerCards, AlterBars-NLD (customised AlterBars), TokenMod
+
+Macro Code:
+!power {{
+--tokenid|@{selected|token_id}
+
+--hroll|Current Hit Points: |[[ [$HPs] {@{selected|bar1}} ]] New Total:[[ [$NewTotal]  {@{selected|bar1}} + {?{HP Gained|0}} ]] Current Non Lethal Damage: |[[ [$CNLD] {@{selected|non-lethal-damage}} ]]
+--New NLD Total: [[ [$NNLD] {@{selected|non-lethal-damage} - ?{HP Gained|0},0}kh1 ]]
+
+--alterbar1|_target|@{selected|token_id} _bar|1 _amount|?{HP Gained|0} _show|all
+?? $CNLD > 0 ?? --@{selected|token_name} heals [[ [$NLD2H] {?{HP Gained|0},@{selected|non-lethal-damage}}kl1 ]] nonlethal damage.
+
+--?? ?{HP Gained|0} > 0 ?? api_token-mod|_ids @{selected|token_id} _ignore-selected _set statusmarkers|-half-heart
+--?? $CNLD > 0 ?? api_setattr|_name @{selected|character_name} _silent _mod _non-lethal-damage|-[^NLD2H]
+
+}}
