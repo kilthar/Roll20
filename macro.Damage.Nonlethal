@@ -1,0 +1,22 @@
+Macro Name:
+☣Damage☣Nonlethal☣
+
+Dependancies:
+
+
+Macro code:
+!power {{
+--name|Nonlethal Damage
+--tokenid|@{selected|token_id}
+
+--hroll|Current Hit Points: |[[ [$HPs] {@{selected|bar1}} ]] Current NLD: |[[ [$cNLD] {@{selected|non-lethal-damage}} ]] New Nonlethal Damage: |[[ [$NNLD] {@{selected|non-lethal-damage}} + ?{Nonlethal Damage Taken|0} ]]
+--@{selected|character_name} takes |[[ [$NLD] {?{Nonlethal Damage Taken|0}} ]] nonlethal damage
+
+--?? $NNLD < $HPs ?? api_setattr|_name @{selected|character_name} _silent _non-lethal-damage|[^NNLD]
+--?? $NNLD == $HPs ?? api_setattr|_name @{selected|character_name} _silent _condition-staggered|1 _non-lethal-damage|[^NNLD]
+--?? $NNLD > $HPs ?? api_setattr|_name @{selected|character_name} _silent _condition-staggered|0 _condition-unconscious|1 _non-lethal-damage|[^NNLD]
+
+--?? $NNLD > $HPs ?? api_token-mod|_ids @{selected|token_id} _ignore-selected _set statusmarkers|-back-pain|pummeled| rotation|270
+--?? $NNLD == $HPs ?? api_token-mod|_ids @{selected|token_id} _ignore-selected _set statusmarkers|back-pain
+
+}}
