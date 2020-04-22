@@ -1,0 +1,26 @@
+Macro Name:
+☣StabCheck☣
+
+Dependancies:
+ChatSetAttr, PowerCards, TokenMod
+
+Macro Code:
+!power {{
+--name|@{selected|character_name}^^Stabilisation Check
+
+--~C Check: [[ [$ConD20] 1d20 + @{selected|CON-Mod} + @{selected|bar1} ]] vs DC 10 ~C
+
+--?? $ConD20 < 10 ?? hroll|Current Hit Points: |[[ [$HPs] {@{selected|bar1}} ]] New Total:[[ [$NewTotal]  {@{selected|bar1}} - 1 ]] Current NLD: |[[ [$NNLD] {@{selected|non-lethal-damage}} ]] Current CON: |[[ [$cCON] { 0 + @{selected|CON} + 0} ]] Death Check: |[[ [$Death] { 0 + @{selected|CON} + 0} + {@{selected|bar1}} - 1} ]] CON-Check: |[[ [$ConCheck] 1d20 + @{selected|CON-Mod} + @{selected|bar1} ]]
+
+--?? $ConD20.base == 20 ?? api_setattr|_name @{selected|character_name} _silent _condition-dying|0 _condition-unconscious|1 _condition-staggered|0 
+--?? $ConD20.base == 20 ?? api_token-mod|_ids @{selected|token_id} _ignore-selected _set statusmarkers|-dying|-back-pain|-half-heart|-pummeled| rotation|270
+
+--?? $ConD20 >= 10 ?? api_setattr|_name @{selected|character_name} _silent _condition-dying|0 _condition-unconscious|1 _condition-staggered|0 
+--?? $ConD20 >= 10 ?? api_token-mod|_ids @{selected|token_id} _ignore-selected _set statusmarkers|-dying|-back-pain|-half-heart|-pummeled| rotation|270
+
+--?? $ConD20 < 10 AND $ConD20.base <> 20 ?? alterbar1|_target|@{selected|token_id} _bar|1 _amount|-1 _show|all
+
+--?? $Death <= 0 AND $ConD20 < 10 ?? api_setattr|_name @{selected|character_name} _condition-dead|1 _condition-bleed|0 _silent _condition-dying|0 _condition-staggered|0 _condition-unconscious|0 
+--?? $Death <= 0 AND $ConD20 < 10 ?? api_token-mod|_ids @{selected|token_id} _ignore-selected _set statusmarkers|dead|-dying|-back-pain|-half-heart|-pummeled| rotation|270
+
+}}
