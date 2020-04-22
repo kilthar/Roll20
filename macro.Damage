@@ -1,0 +1,27 @@
+Macro Name:
+☣Damage☣
+
+Dependancies:
+Requires APIs ChatSetAttr, PowerCards, AlterBars-NLD (customised AlterBars), TokenMod
+
+Macro Code:
+!power {{
+--tokenid|@{selected|token_id}
+
+--hroll|Current Hit Points: |[[ [$HPs] {@{selected|bar1}} ]] New Total:[[ [$NewTotal]  {@{selected|bar1}} - {?{Damage Taken|0}} ]] Current NLD: |[[ [$NNLD] {@{selected|non-lethal-damage}} ]] Current CON: |[[ [$cCON] { 0 + @{selected|CON} + 0} ]] Death Check: |[[ [$Death] { 0 + @{selected|CON} + 0} + {@{selected|bar1}} - {?{Damage Taken|0}} ]]
+
+--alterbar1|_target|@{selected|token_id} _bar|1 _amount|-?{Damage Taken|0} _show|all
+
+--?? $NNLD > $NewTotal ?? api_setattr|_name @{selected|character_name} _silent _condition-unconscious|1 _condition-staggered|0
+--?? $NNLD > $NewTotal ?? api_token-mod|_ids @{selected|token_id} _ignore-selected _set statusmarkers|-back-pain|pummeled| rotation|270
+
+--?? $NNLD == $NewTotal ?? api_setattr|_name @{selected|character_name} _silent _condition-staggered|1
+--?? $NNLD == $NewTotal ?? api_token-mod|_ids @{selected|token_id} _ignore-selected _set statusmarkers|back-pain
+
+--?? ?{Damage Taken|0} > 0 AND $NewTotal < 0 AND $Death > 0 ?? api_setattr|_name @{selected|character_name} _silent _condition-dying|1 _condition-unconscious|1 _condition-staggered|0
+--?? ?{Damage Taken|0} > 0 AND $NewTotal < 0 AND $Death > 0 ?? api_token-mod|_ids @{selected|token_id} _ignore-selected _set statusmarkers|-back-pain|half-heart| rotation|270
+
+--?? $Death <= 0 ?? api_setattr|_name @{selected|character_name} _condition-dead|1 _condition-bleed|0 _silent _condition-dying|0 _condition-staggered|0 _condition-unconscious|0 
+--?? $Death <= 0 ?? api_token-mod|_ids @{selected|token_id} _ignore-selected _set statusmarkers|dead|-dying|-back-pain|-half-heart|-pummeled| rotation|270
+
+}}
